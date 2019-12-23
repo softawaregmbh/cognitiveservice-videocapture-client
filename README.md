@@ -1,0 +1,1 @@
+# cognitiveservice-videocapture-client
