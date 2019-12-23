@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VideoCapture.DemoAnalyzer;
 using VideoCapture.Grabber;
 
 namespace VideoCapture.UI
@@ -31,7 +32,7 @@ namespace VideoCapture.UI
             InitializeComponent();
 
             this.grabber = new VideoGrabber();
-            this.mainViewModel = new MainViewModel(grabber);
+            this.mainViewModel = new MainViewModel(grabber, new DemoAnalyzer.DemoAnalyzer());
             this.DataContext = this.mainViewModel;
 
             this.Loaded += MainWindow_Loaded;
