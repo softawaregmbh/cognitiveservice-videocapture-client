@@ -9,6 +9,11 @@
   <ItemGroup>
     <PackageReference Include="OpenCvSharp4" Version="4.2.0.20191223" />
     <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.2.0.20191223" />
+    <PackageReference Include="softaware.ViewPort.Wpf" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VideoCapture.Grabber\VideoCapture.Grabber.csproj" />
   </ItemGroup>
 
 </Project>

@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VideoCapture.Grabber;
 
 namespace VideoCapture.UI
 {
@@ -22,35 +23,23 @@ namespace VideoCapture.UI
     /// </summary>
     public partial class MainWindow : System.Windows.Window
     {
+        private IVideoGrabber grabber;
+        private MainViewModel mainViewModel;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            this.grabber = new VideoGrabber();
+            this.mainViewModel = new MainViewModel(grabber);
+            this.DataContext = this.mainViewModel;
 
             this.Loaded += MainWindow_Loaded;
         }
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            OpenCvSharp.VideoCapture capture = new OpenCvSharp.VideoCapture(0);
-            using (Mat image = new Mat())
-            {
-                while (true)
-                {
-                    capture.Read(image);
-                    
-                    if (image.Empty())
-                    {
-                        break;
-                    }
-
-                    using (var stream = image.ToMemoryStream(".jpg", new ImageEncodingParam(ImwriteFlags.JpegQuality, 100)))
-                    {
-                        videoFrame.Source = BitmapFrame.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
-                    }
-
-                    await Task.Delay(10);
-                }
-            }
+            await this.mainViewModel.InitializeAsync();
         }
     }
 }
