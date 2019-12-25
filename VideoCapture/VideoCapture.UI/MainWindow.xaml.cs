@@ -42,5 +42,13 @@ namespace VideoCapture.UI
         {
             await this.mainViewModel.InitializeAsync();
         }
+
+        private void videoFrame_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // You cannot bind the (read-only) Width property directly, 
+            // so set it in the size changed event handler manually
+
+            this.mainViewModel.ImageWidth = this.videoFrame.ActualWidth;
+        }
     }
 }

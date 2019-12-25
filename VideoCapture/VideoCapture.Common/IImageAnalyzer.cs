@@ -5,6 +5,6 @@ namespace VideoCapture.Common
 {
     public interface IImageAnalyzer
     {
-        Task<ImageInformation> AnalyzeImageAsync(byte[] image);
+        Task<ImageInformation> AnalyzeImageAsync(byte[] image, string mimeType);
     }
 }

@@ -7,7 +7,7 @@ namespace VideoCapture.DemoAnalyzer
 {
     public class DemoAnalyzer : IImageAnalyzer
     {
-        public Task<ImageInformation> AnalyzeImageAsync(byte[] image)
+        public Task<ImageInformation> AnalyzeImageAsync(byte[] image, string mimeType)
         {
             return Task.FromResult(new ImageInformation()
             {

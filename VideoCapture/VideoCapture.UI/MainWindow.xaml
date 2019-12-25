@@ -4,13 +4,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VideoCapture.UI"
+        xmlns:converters="clr-namespace:VideoCapture.UI.Converters"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Name="window"
+        Title="Video Capture UI for demonstrating Cognitive Services" Height="450" Width="800">
+    <Window.Resources>
+        <converters:ScaleConverter x:Key="scaleConverter" />
+    </Window.Resources>
     <Grid>
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
         <Image Name="videoFrame"
                Source="{Binding CurrentFrame}"
-               Width="400" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+               HorizontalAlignment="Left" VerticalAlignment="Top"
+               SizeChanged="videoFrame_SizeChanged"/>
 
         <ItemsControl ItemsSource="{Binding RegionTags}"
                       HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -21,23 +31,51 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemContainerStyle>
                 <Style>
-                    <Setter Property="Canvas.Left" Value="{Binding X}" />
-                    <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                    <Setter Property="Canvas.Left">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource scaleConverter}">
+                                <Binding Path="X" />
+                                <Binding Path="DataContext.FrameToImageScale" ElementName="window"/>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Canvas.Top">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource scaleConverter}">
+                                <Binding Path="Y" />
+                                <Binding Path="DataContext.FrameToImageScale" ElementName="window"/>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
                         <TextBlock Text="{Binding X}" />
-                        
-                        <Rectangle Width="{Binding Width}"
-                                   Height="{Binding Height}"
-                                   Stroke="Red" StrokeThickness="3">
+
+                        <Rectangle Stroke="Red" StrokeThickness="3">
+                            <Rectangle.Width>
+                                <MultiBinding Converter="{StaticResource scaleConverter}">
+                                    <Binding Path="Width" />
+                                    <Binding Path="DataContext.FrameToImageScale" ElementName="window"/>
+                                </MultiBinding>
+                            </Rectangle.Width>
+                            <Rectangle.Height>
+                                <MultiBinding Converter="{StaticResource scaleConverter}">
+                                    <Binding Path="Height" />
+                                    <Binding Path="DataContext.FrameToImageScale" ElementName="window"/>
+                                </MultiBinding>
+                            </Rectangle.Height>
                         </Rectangle>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
+
+        <TextBlock Text="{Binding FrameToImageScale, StringFormat=N2}"
+                   Grid.Column="1" 
+                   FontSize="22" />
     </Grid>
 </Window>

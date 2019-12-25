@@ -25,7 +25,7 @@ namespace VideoCapture.Grabber
 
                     using (var stream = image.ToMemoryStream(".jpg", new ImageEncodingParam(ImwriteFlags.JpegQuality, 100)))
                     {
-                        OnFrameGrabbed?.Invoke(stream);
+                        OnFrameGrabbed?.Invoke(stream, "image/jpeg", image.Width, image.Height);
                     }
 
                     await Task.Delay(delay);
