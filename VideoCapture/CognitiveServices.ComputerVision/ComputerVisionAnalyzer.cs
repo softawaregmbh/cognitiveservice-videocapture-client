@@ -37,8 +37,7 @@ namespace CognitiveServices.ComputerVision
         /// <inheritdoc/>
         public double CostsPerRequest => 0.84 / 1000;
 
-        /// <inheritdoc/>
-        public async Task<ImageInformation> AnalyzeImageAsync(byte[] image, string mimeType)
+        public async Task<ImageInformation> AnalyzeImageAsync(byte[] image, string mimeType, int width, int height)
         {
             using (var memoryStream = new MemoryStream(image))
             {

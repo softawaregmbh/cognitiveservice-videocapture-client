@@ -16,8 +16,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using OpenCvSharp;
-using OpenCvSharp.Extensions;
 using VideoCapture.Grabber;
 
 namespace VideoCapture.UI

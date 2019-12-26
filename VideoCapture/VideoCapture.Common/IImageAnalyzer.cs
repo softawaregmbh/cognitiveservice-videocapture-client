@@ -12,20 +12,8 @@ namespace VideoCapture.Common
     /// </summary>
     public interface IImageAnalyzer
     {
-        /// <summary>
-        /// Gets the approx. costs per request.
-        /// </summary>
-        /// <value>
-        /// The costs per request.
-        /// </value>
-        double CostsPerRequest { get; }
+        Task<ImageInformation> AnalyzeImageAsync(byte[] image, string mimeType, int width, int height);
 
-        /// <summary>
-        /// Exracts further information e.g. by using external services.
-        /// </summary>
-        /// <param name="image">The image as byte array.</param>
-        /// <param name="mimeType">The MIME type of the image.</param>
-        /// <returns>An instance of ImageInformation class or null.</returns>
-        Task<ImageInformation> AnalyzeImageAsync(byte[] image, string mimeType);
+        double CostsPerRequest { get; }
     }
 }

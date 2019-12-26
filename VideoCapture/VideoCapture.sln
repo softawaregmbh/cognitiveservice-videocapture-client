@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VideoCapture.Common", "Vide
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CognitiveServices.ComputerVision", "CognitiveServices.ComputerVision\CognitiveServices.ComputerVision.csproj", "{F68FF27C-EE5E-4BFA-94FC-E43927CEDD0E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CognitiveServices.CustomVision", "CognitiveServices.CustomVision\CognitiveServices.CustomVision.csproj", "{ED94019C-498B-4A89-8AD0-66760D40E2DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{F68FF27C-EE5E-4BFA-94FC-E43927CEDD0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F68FF27C-EE5E-4BFA-94FC-E43927CEDD0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F68FF27C-EE5E-4BFA-94FC-E43927CEDD0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED94019C-498B-4A89-8AD0-66760D40E2DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED94019C-498B-4A89-8AD0-66760D40E2DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED94019C-498B-4A89-8AD0-66760D40E2DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED94019C-498B-4A89-8AD0-66760D40E2DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

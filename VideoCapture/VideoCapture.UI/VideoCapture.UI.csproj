@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CognitiveServices.ComputerVision\CognitiveServices.ComputerVision.csproj" />
+    <ProjectReference Include="..\CognitiveServices.CustomVision\CognitiveServices.CustomVision.csproj" />
     <ProjectReference Include="..\VideoCapture.Common\VideoCapture.Common.csproj" />
     <ProjectReference Include="..\VideoCapture.Grabber\VideoCapture.Grabber.csproj" />
   </ItemGroup>

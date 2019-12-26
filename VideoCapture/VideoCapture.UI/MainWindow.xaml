@@ -54,7 +54,12 @@
                 <DataTemplate>
                     <Grid>
                         <Border Background="#BB000000" Padding="2" CornerRadius="1" HorizontalAlignment="Left" VerticalAlignment="Top">
-                            <TextBlock Text="{Binding RegionTag.DisplayText}" Foreground="White" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding RegionTag.DisplayText}" Foreground="White" />
+                                <TextBlock Text="{Binding RegionTag.Confidence, StringFormat=P0}" 
+                                           Foreground="LightGray" 
+                                           Margin="5,0,0,0"/>
+                            </StackPanel>
                         </Border>
 
                         <Rectangle Stroke="{Binding RegionTag.Confidence, Converter={StaticResource confidenceToColorConverter}}" StrokeThickness="3">
