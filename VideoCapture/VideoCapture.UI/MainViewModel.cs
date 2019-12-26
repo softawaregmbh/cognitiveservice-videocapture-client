@@ -1,4 +1,7 @@
-﻿using softaware.ViewPort.Core;
+﻿// <copyright file="MainViewModel.cs" company="softaware gmbh">
+// Copyright (c) softaware gmbh. All rights reserved.
+// </copyright>
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -6,11 +9,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using softaware.ViewPort.Core;
 using VideoCapture.Common;
 using VideoCapture.Grabber;
 
 namespace VideoCapture.UI
 {
+    /// <summary>
+    /// The main view model for the application.
+    /// </summary>
+    /// <seealso cref="softaware.ViewPort.Core.NotifyPropertyChanged" />
     public class MainViewModel : NotifyPropertyChanged
     {
         private readonly IVideoGrabber videoGrabber;
@@ -24,9 +32,16 @@ namespace VideoCapture.UI
         private DateTime? lastAnalysis = null;
         private bool currentlyAnalysing;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainViewModel"/> class.
+        /// </summary>
+        /// <param name="videoGrabber">The video grabber.</param>
+        /// <param name="minDelayBetweenAnalysis">The minimum delay between two analysis steps.</param>
+        /// <param name="imageAnalyzers">The image analyzers.</param>
+        /// <exception cref="System.ArgumentNullException">The video grabber instance must be set.</exception>
         public MainViewModel(
-            IVideoGrabber videoGrabber, 
-            TimeSpan minDelayBetweenAnalysis, 
+            IVideoGrabber videoGrabber,
+            TimeSpan minDelayBetweenAnalysis,
             params IImageAnalyzer[] imageAnalyzers)
         {
             this.videoGrabber = videoGrabber ?? throw new ArgumentNullException(nameof(videoGrabber));
@@ -37,13 +52,100 @@ namespace VideoCapture.UI
             {
                 CostsPerRequest = a.CostsPerRequest,
                 Count = 0,
-                Name = a.GetType().Name
+                Name = a.GetType().Name,
             });
         }
 
+        /// <summary>
+        /// Gets or sets the region tags.
+        /// </summary>
+        public ObservableCollection<RegionTagViewModel> RegionTags { get; set; }
+
+        /// <summary>
+        /// Gets or sets the current frame of the video grabber.
+        /// </summary>
+        public byte[] CurrentFrame
+        {
+            get { return this.currentFrame; }
+            set { this.SetProperty(ref this.currentFrame, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the width of the analysis stream frame.
+        /// </summary>
+        public int FrameWidth
+        {
+            get
+            {
+                return this.frameWidth;
+            }
+
+            set
+            {
+                if (this.frameWidth != value)
+                {
+                    this.SetProperty(ref this.frameWidth, value);
+                    this.RaisePropertyChanged(nameof(this.FrameToImageScale));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the height of the analysis stream frame.
+        /// </summary>
+        public int FrameHeight
+        {
+            get { return this.frameHeight; }
+            set { this.SetProperty(ref this.frameHeight, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the width of the display stream frame.
+        /// </summary>
+        public double ImageWidth
+        {
+            get
+            {
+                return this.imageWidth;
+            }
+
+            set
+            {
+                if (this.imageWidth != value)
+                {
+                    this.SetProperty(ref this.imageWidth, value);
+                    this.RaisePropertyChanged(nameof(this.FrameToImageScale));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the scale factor between the analysis stream and the visualized image.
+        /// </summary>
+        public double FrameToImageScale
+        {
+            get
+            {
+                return (double)this.ImageWidth / this.FrameWidth;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the statistics dictionary with information per image analyzer.
+        /// </summary>
+        public IDictionary<IImageAnalyzer, AnalyzerStatisticsViewModel> Statistics
+        {
+            get { return this.statistics; }
+            set { this.SetProperty(ref this.statistics, value); }
+        }
+
+        /// <summary>
+        /// Initializes the view model.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public async Task InitializeAsync()
         {
-            this.videoGrabber.OnFrameGrabbed += VideoGrabber_OnFrameGrabbedAsync;
+            this.videoGrabber.OnFrameGrabbed += this.VideoGrabber_OnFrameGrabbedAsync;
 
             await this.videoGrabber.StartAsync();
         }
@@ -54,14 +156,14 @@ namespace VideoCapture.UI
             this.CurrentFrame = byteArray;
             this.FrameWidth = width;
 
-            if (!currentlyAnalysing && (lastAnalysis == null || DateTime.Now.Subtract(lastAnalysis.Value) > minDelayBetweenAnalysis))
+            if (!this.currentlyAnalysing && (this.lastAnalysis == null || DateTime.Now.Subtract(this.lastAnalysis.Value) > this.minDelayBetweenAnalysis))
             {
-                lastAnalysis = DateTime.Now;
+                this.lastAnalysis = DateTime.Now;
                 this.currentlyAnalysing = true;
 
                 var analysisArray = analysisStream.ToArray();
 
-                foreach (var imageAnalyzer in imageAnalyzers)
+                foreach (var imageAnalyzer in this.imageAnalyzers)
                 {
                     DateTime startTime = DateTime.Now;
                     var info = await imageAnalyzer.AnalyzeImageAsync(analysisArray, mimeType, width, height);
@@ -85,7 +187,7 @@ namespace VideoCapture.UI
                             this.RegionTags.Add(new RegionTagViewModel()
                             {
                                 ImageAnalyzerType = imageAnalyzer.GetType(),
-                                RegionTag = regionTag
+                                RegionTag = regionTag,
                             });
                         }
                     }
@@ -93,60 +195,6 @@ namespace VideoCapture.UI
 
                 this.currentlyAnalysing = false;
             }
-        }
-
-        public ObservableCollection<RegionTagViewModel> RegionTags { get; set; }
-
-        public byte[] CurrentFrame
-        {
-            get { return this.currentFrame; }
-            set { this.SetProperty(ref currentFrame, value); }
-        }
-
-        public int FrameWidth
-        {
-            get { return frameWidth; }
-            set 
-            { 
-                if (this.frameWidth != value)
-                {
-                    this.SetProperty(ref this.frameWidth, value);
-                    this.RaisePropertyChanged(nameof(this.FrameToImageScale));
-                }
-            }
-        }
-
-        public int FrameHeight
-        {
-            get { return frameHeight; }
-            set { this.SetProperty(ref this.frameHeight, value); }
-        }
-
-        public double ImageWidth
-        {
-            get { return imageWidth; }
-            set 
-            {
-                if (this.imageWidth != value)
-                {
-                    this.SetProperty(ref this.imageWidth, value);
-                    this.RaisePropertyChanged(nameof(this.FrameToImageScale));
-                }
-            }
-        }
-
-        public double FrameToImageScale
-        {
-            get
-            {
-                return (double)this.ImageWidth / this.FrameWidth;
-            }
-        }        
-
-        public IDictionary<IImageAnalyzer, AnalyzerStatisticsViewModel> Statistics
-        {
-            get { return statistics; }
-            set { this.SetProperty(ref this.statistics, value); }
         }
     }
 }

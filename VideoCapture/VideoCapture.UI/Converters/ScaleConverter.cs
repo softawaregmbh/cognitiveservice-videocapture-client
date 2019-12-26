@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="ScaleConverter.cs" company="softaware gmbh">
+// Copyright (c) softaware gmbh. All rights reserved.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;

@@ -1,7 +1,7 @@
-﻿using CognitiveServices.ComputerVision;
-using CognitiveServices.CustomVision;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿// <copyright file="App.xaml.cs" company="softaware gmbh">
+// Copyright (c) softaware gmbh. All rights reserved.
+// </copyright>
+
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -10,20 +10,33 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using CognitiveServices.ComputerVision;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using VideoCapture.Common;
 using VideoCapture.Grabber;
 
 namespace VideoCapture.UI
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Interaction logic for App.xaml.
     /// </summary>
     public partial class App : Application
     {
+        /// <summary>
+        /// Gets the service provider.
+        /// </summary>
         public IServiceProvider ServiceProvider { get; private set; }
 
+        /// <summary>
+        /// Gets the configuration.
+        /// </summary>
         public IConfiguration Configuration { get; private set; }
 
+        /// <summary>
+        /// Raises the <see cref="E:System.Windows.Application.Startup" /> event.
+        /// </summary>
+        /// <param name="e">A <see cref="T:System.Windows.StartupEventArgs" /> that contains the event data.</param>
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -40,7 +53,7 @@ namespace VideoCapture.UI
 
             this.ServiceProvider = serviceCollection.BuildServiceProvider();
 
-            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+            var mainWindow = this.ServiceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
         }
 

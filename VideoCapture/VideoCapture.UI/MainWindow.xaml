@@ -21,7 +21,7 @@
         <Image Name="videoFrame"
                Source="{Binding CurrentFrame}"
                HorizontalAlignment="Left" VerticalAlignment="Top"
-               SizeChanged="videoFrame_SizeChanged"/>
+               SizeChanged="VideoFrame_SizeChanged"/>
 
         <ItemsControl ItemsSource="{Binding RegionTags}"
                       HorizontalAlignment="Left" VerticalAlignment="Top">

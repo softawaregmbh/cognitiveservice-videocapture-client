@@ -1,5 +1,7 @@
-﻿using OpenCvSharp;
-using OpenCvSharp.Extensions;
+﻿// <copyright file="MainWindow.xaml.cs" company="softaware gmbh">
+// Copyright (c) softaware gmbh. All rights reserved.
+// </copyright>
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,22 +21,27 @@ using VideoCapture.Grabber;
 namespace VideoCapture.UI
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// The interaction logic for MainWindow.xaml.
     /// </summary>
     public partial class MainWindow : System.Windows.Window
     {
         private IVideoGrabber grabber;
         private MainViewModel mainViewModel;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindow"/> class.
+        /// </summary>
+        /// <param name="grabber">The grabber.</param>
+        /// <param name="mainViewModel">The main view model.</param>
         public MainWindow(IVideoGrabber grabber, MainViewModel mainViewModel)
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
             this.grabber = grabber;
             this.mainViewModel = mainViewModel;
             this.DataContext = this.mainViewModel;
 
-            this.Loaded += MainWindow_Loaded;
+            this.Loaded += this.MainWindow_Loaded;
         }
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -42,11 +49,10 @@ namespace VideoCapture.UI
             await this.mainViewModel.InitializeAsync();
         }
 
-        private void videoFrame_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void VideoFrame_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            // You cannot bind the (read-only) Width property directly, 
+            // You cannot bind the (read-only) Width property directly,
             // so set it in the size changed event handler manually
-
             this.mainViewModel.ImageWidth = this.videoFrame.ActualWidth;
         }
     }
