@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using CognitiveServices.ComputerVision;
+using CognitiveServices.CustomVision;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VideoCapture.Common;
@@ -61,8 +62,8 @@ namespace VideoCapture.UI
         {
             services.AddSingleton<IVideoGrabber, VideoGrabber>();
 
-            services.Configure<ComputerVisionSettings>(Configuration.GetSection(nameof(ComputerVisionSettings)));
-            services.Configure<CustomVisionSettings>(Configuration.GetSection(nameof(CustomVisionSettings)));
+            services.Configure<ComputerVisionSettings>(this.Configuration.GetSection(nameof(ComputerVisionSettings)));
+            services.Configure<CustomVisionSettings>(this.Configuration.GetSection(nameof(CustomVisionSettings)));
 
             services.AddTransient<IImageAnalyzer, ComputerVisionAnalyzer>();
             services.AddTransient<IImageAnalyzer, CustomVisionAnalyzer>();

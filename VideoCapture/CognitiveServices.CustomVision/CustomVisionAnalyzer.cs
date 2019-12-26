@@ -1,10 +1,9 @@
-﻿using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction;
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction;
+using Microsoft.Extensions.Options;
 using VideoCapture.Common;
 
 namespace CognitiveServices.CustomVision
@@ -14,22 +13,22 @@ namespace CognitiveServices.CustomVision
         private readonly CustomVisionPredictionClient customVisionApi;
         private readonly CustomVisionSettings settings;
 
-        public double CostsPerRequest => 1.69/1000;
-
         public CustomVisionAnalyzer(IOptions<CustomVisionSettings> settings)
         {
             this.settings = settings.Value;
 
-            customVisionApi = new CustomVisionPredictionClient();
-            customVisionApi.Endpoint = this.settings.Endpoint;
-            customVisionApi.ApiKey = this.settings.PredictionKey;
-    }
+            this.customVisionApi = new CustomVisionPredictionClient();
+            this.customVisionApi.Endpoint = this.settings.Endpoint;
+            this.customVisionApi.ApiKey = this.settings.PredictionKey;
+        }
+
+        public double CostsPerRequest => 1.69 / 1000;
 
         public async Task<ImageInformation> AnalyzeImageAsync(byte[] image, string mimeType, int width, int height)
         {
             using (var memoryStream = new MemoryStream(image))
             {
-                var result = await customVisionApi.DetectImageAsync(
+                var result = await this.customVisionApi.DetectImageAsync(
                                 Guid.Parse(this.settings.ProjectId),
                                 this.settings.Iteration,
                                 memoryStream);
