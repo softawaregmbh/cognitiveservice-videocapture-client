@@ -1,0 +1,135 @@
+﻿<Window x:Class="VideoCapture.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VideoCapture.UI"
+        xmlns:converters="clr-namespace:VideoCapture.UI.Converters"
+        mc:Ignorable="d"
+        Name="window"
+        Title="Video Capture UI for demonstrating Cognitive Services" Height="450" Width="800">
+    <Window.Resources>
+        <converters:ScaleConverter x:Key="scaleConverter" />
+        <converters:ConfidenceToColorConverter x:Key="confidenceToColorConverter" />
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" MinWidth="250" />
+        </Grid.ColumnDefinitions>
+        
+        <Image Name="videoFrame"
+               Source="{Binding CurrentFrame}"
+               HorizontalAlignment="Left" VerticalAlignment="Top"
+               SizeChanged="videoFrame_SizeChanged"/>
+
+        <ItemsControl ItemsSource="{Binding RegionTags}"
+                      HorizontalAlignment="Left" VerticalAlignment="Top">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas IsItemsHost="True"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Canvas.Left">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource scaleConverter}">
+                                <Binding Path="RegionTag.X" />
+                                <Binding Path="DataContext.FrameToImageScale" ElementName="window"/>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Canvas.Top">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource scaleConverter}">
+                                <Binding Path="RegionTag.Y" />
+                                <Binding Path="DataContext.FrameToImageScale" ElementName="window"/>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Border Background="#BB000000" Padding="2" CornerRadius="1" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <TextBlock Text="{Binding RegionTag.DisplayText}" Foreground="White" />
+                        </Border>
+
+                        <Rectangle Stroke="{Binding RegionTag.Confidence, Converter={StaticResource confidenceToColorConverter}}" StrokeThickness="3">
+                            <Rectangle.Width>
+                                <MultiBinding Converter="{StaticResource scaleConverter}">
+                                    <Binding Path="RegionTag.Width" />
+                                    <Binding Path="DataContext.FrameToImageScale" ElementName="window"/>
+                                </MultiBinding>
+                            </Rectangle.Width>
+                            <Rectangle.Height>
+                                <MultiBinding Converter="{StaticResource scaleConverter}">
+                                    <Binding Path="RegionTag.Height" />
+                                    <Binding Path="DataContext.FrameToImageScale" ElementName="window"/>
+                                </MultiBinding>
+                            </Rectangle.Height>
+                        </Rectangle>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <ItemsControl ItemsSource="{Binding Statistics}" Grid.Column="1"
+                      HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                      Margin="10">
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Margin" Value="0,0,0,10" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid DataContext="{Binding Value}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="{Binding Name}" FontWeight="Bold" 
+                                   HorizontalAlignment="Left"
+                                   Grid.ColumnSpan="2"/>
+
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="left"
+                                    Grid.Row="1" Grid.Column="0" >
+                            <TextBlock Text="{Binding Count}"
+                                       FontSize="22"/>
+                            <TextBlock Text="requests" 
+                                       FontSize="11" Foreground="Gray"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Right"
+                                    Grid.Row="1" Grid.Column="1" >
+                            <TextBlock Text="{Binding Costs, StringFormat=N4}"
+                                       FontSize="22" />
+                            <TextBlock Text="costs (this session)" 
+                                       FontSize="11" Foreground="Gray"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="left"
+                                    Grid.Row="2" Grid.ColumnSpan="2" >
+                            <TextBlock Text="{Binding LastDuration.TotalMilliseconds, StringFormat=N0}"
+                                       FontSize="22"/>
+                            <TextBlock Text="ms for last request" 
+                                       FontSize="11" Foreground="Gray"/>
+                        </StackPanel>
+
+                    </Grid>
+                    
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            
+        </ItemsControl>
+    </Grid>
+</Window>
