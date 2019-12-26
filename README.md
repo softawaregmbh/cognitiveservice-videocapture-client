@@ -2,16 +2,18 @@
 
 I regularly demonstrate how to use the [Microsoft Azure Cognitive Services](https://azure.microsoft.com/en-us/services/cognitive-services/) and tried to find a way how to send a webcam live stream directly to the Cognitive Services.
 
-The [Cognitive-Samples-VideoFrameAnalysis](https://github.com/microsoft/Cognitive-Samples-VideoFrameAnalysis) project from Microsoft didn't fulfill all my requirements, especially I wanted a .NET Core 3 WPF application with dependency injection and MVVM.
+The [Cognitive-Samples-VideoFrameAnalysis](https://github.com/microsoft/Cognitive-Samples-VideoFrameAnalysis) project didn't fulfill all my requirements, especially I was looking for a .NET Core 3 WPF application with dependency injection and MVVM.
 
-So.. here it is. Feel free to use it, any feedback (our pull request) is welcome!
+So.. here it is. Feel free to use it, any feedback (or pull request) is welcome!
 
 ![Screenshot of the Video Capture application](videograbber-cognitiveservices-screenshot.png)
 
 ## Usage
-The main application uses the [OpenCvSharp](https://github.com/shimat/opencvsharp) wrapper to grab frames from the webcam. In a configurable frequency (see constructor of _MainViewModel_, default is 1 second) the frame is sent to instances of _IImageAnalyzer_ implementations.
+The main application uses the [OpenCvSharp](https://github.com/shimat/opencvsharp) wrapper to grab frames from the webcam. In a configurable frequency (see constructor of _MainViewModel_, default is 1 second) the frame is sent to _IImageAnalyzer_ implementations.
 
-Currently two _IImageAnalyzers_ are available: _ComputerVision_ and _CustomVision_. .NET Core dependency injection is used to instantiate and configure them.
+Currently two _IImageAnalyzers_ are available: _ComputerVision_ and _CustomVision_. 
+
+.NET Core dependency injection is used to instantiate and configure them.
 
 You can easily extend the application by creating your own _IImageAnalyzer_ implementations.
 
@@ -57,6 +59,6 @@ Please specify your endpoint and API key in the _appsettings.json_ file:
 ```
 
 ## Statistics
-To get an idea of the request duration and the total costs I've added statistics to the application. Every analyzer can provide the costs per request, the application calculates the total costs based on that.
+To get an idea of the approximate costs, I've added statistics to the application. Every analyzer specifies the costs per request, the application calculates the total costs and additionally measures the request duration.
 
-Please be aware that the prices in the repository are in Euro - and might be outdated. The current costs can be found here: [Cognitive Services pricing](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/).
+Please be aware of the fact that the prices in the repository are in Euro - and might be outdated. The current costs can be found here: [Cognitive Services pricing](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/).
