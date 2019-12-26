@@ -14,7 +14,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using VideoCapture.DemoAnalyzer;
 using VideoCapture.Grabber;
 
 namespace VideoCapture.UI
@@ -27,12 +26,12 @@ namespace VideoCapture.UI
         private IVideoGrabber grabber;
         private MainViewModel mainViewModel;
 
-        public MainWindow()
+        public MainWindow(IVideoGrabber grabber, MainViewModel mainViewModel)
         {
             InitializeComponent();
 
-            this.grabber = new VideoGrabber();
-            this.mainViewModel = new MainViewModel(grabber, new DemoAnalyzer.DemoAnalyzer());
+            this.grabber = grabber;
+            this.mainViewModel = mainViewModel;
             this.DataContext = this.mainViewModel;
 
             this.Loaded += MainWindow_Loaded;
@@ -41,6 +40,14 @@ namespace VideoCapture.UI
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             await this.mainViewModel.InitializeAsync();
+        }
+
+        private void videoFrame_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // You cannot bind the (read-only) Width property directly, 
+            // so set it in the size changed event handler manually
+
+            this.mainViewModel.ImageWidth = this.videoFrame.ActualWidth;
         }
     }
 }
