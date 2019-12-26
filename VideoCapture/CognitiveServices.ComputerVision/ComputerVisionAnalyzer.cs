@@ -1,19 +1,31 @@
-﻿using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
-using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
-using Microsoft.Extensions.Options;
+﻿// <copyright file="ComputerVisionAnalyzer.cs" company="softaware gmbh">
+// Copyright (c) softaware gmbh. All rights reserved.
+// </copyright>
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
+using Microsoft.Extensions.Options;
 using VideoCapture.Common;
 
 namespace CognitiveServices.ComputerVision
 {
+    /// <summary>
+    /// Image analyzer using the Azure Cognitive Services Computer Vision API.
+    /// </summary>
+    /// <seealso cref="VideoCapture.Common.IImageAnalyzer" />
     public class ComputerVisionAnalyzer : IImageAnalyzer
     {
         private ComputerVisionClient computerVisionApi;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ComputerVisionAnalyzer"/> class.
+        /// </summary>
+        /// <param name="settings">Settings for initializing a new instance.</param>
         public ComputerVisionAnalyzer(IOptions<ComputerVisionSettings> settings)
         {
             this.computerVisionApi = new ComputerVisionClient(
@@ -22,20 +34,18 @@ namespace CognitiveServices.ComputerVision
             this.computerVisionApi.Endpoint = settings.Value.Endpoint;
         }
 
-        public double CostsPerRequest => 0.84/1000;
+        /// <inheritdoc/>
+        public double CostsPerRequest => 0.84 / 1000;
 
+        /// <inheritdoc/>
         public async Task<ImageInformation> AnalyzeImageAsync(byte[] image, string mimeType)
         {
             using (var memoryStream = new MemoryStream(image))
             {
                 var result = await this.computerVisionApi.AnalyzeImageInStreamAsync(
                     memoryStream,
-                    new []
-                    {
-                        VisualFeatureTypes.Faces,
-                        VisualFeatureTypes.Objects
-                    });
-                
+                    new[] { VisualFeatureTypes.Faces, VisualFeatureTypes.Objects });
+
                 var tags = new List<RegionTag>();
 
                 if (result.Faces?.Any() ?? false)
@@ -62,7 +72,7 @@ namespace CognitiveServices.ComputerVision
                 {
                     return new ImageInformation()
                     {
-                        RegionTags = tags
+                        RegionTags = tags,
                     };
                 }
             }

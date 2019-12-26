@@ -1,14 +1,24 @@
-﻿using OpenCvSharp;
+﻿// <copyright file="VideoGrabber.cs" company="softaware gmbh">
+// Copyright (c) softaware gmbh. All rights reserved.
+// </copyright>
+
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using OpenCvSharp;
 
 namespace VideoCapture.Grabber
 {
+    /// <summary>
+    /// Video grabber using the OpenCvSharp library.
+    /// </summary>
+    /// <seealso cref="VideoCapture.Grabber.IVideoGrabber" />
     public class VideoGrabber : IVideoGrabber
     {
+        /// <inheritdoc/>
         public event FrameGrabbedHandler OnFrameGrabbed;
 
+        /// <inheritdoc/>
         public async Task StartAsync(int delay = 30)
         {
             OpenCvSharp.VideoCapture capture = new OpenCvSharp.VideoCapture(0);
@@ -30,9 +40,12 @@ namespace VideoCapture.Grabber
                     using (var analysisStream = analysisImage.ToMemoryStream(".jpg", new ImageEncodingParam(ImwriteFlags.JpegQuality, 50)))
                     using (var displayStream = image.ToMemoryStream(".jpg", new ImageEncodingParam(ImwriteFlags.JpegQuality, 100)))
                     {
-                        OnFrameGrabbed?.Invoke(
+                        this.OnFrameGrabbed?.Invoke(
                             displayStream,
-                            analysisStream, "image/jpeg", analysisImage.Width, analysisImage.Height);
+                            analysisStream,
+                            "image/jpeg",
+                            analysisImage.Width,
+                            analysisImage.Height);
                     }
 
                     await Task.Delay(delay);
