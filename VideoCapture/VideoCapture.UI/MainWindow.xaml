@@ -7,7 +7,7 @@
         xmlns:converters="clr-namespace:VideoCapture.UI.Converters"
         mc:Ignorable="d"
         Name="window"
-        Title="Video Capture UI for demonstrating Cognitive Services" Height="450" Width="800">
+        Title="Video Capture application to demonstrate Cognitive Services" Height="450" Width="800">
     <Window.Resources>
         <converters:ScaleConverter x:Key="scaleConverter" />
         <converters:ConfidenceToColorConverter x:Key="confidenceToColorConverter" />
