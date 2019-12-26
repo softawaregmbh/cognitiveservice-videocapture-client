@@ -27,12 +27,12 @@ namespace VideoCapture.UI
         private IVideoGrabber grabber;
         private MainViewModel mainViewModel;
 
-        public MainWindow()
+        public MainWindow(IVideoGrabber grabber, MainViewModel mainViewModel)
         {
             InitializeComponent();
 
-            this.grabber = new VideoGrabber();
-            this.mainViewModel = new MainViewModel(grabber, new DemoAnalyzer.DemoAnalyzer());
+            this.grabber = grabber;
+            this.mainViewModel = mainViewModel;
             this.DataContext = this.mainViewModel;
 
             this.Loaded += MainWindow_Loaded;

@@ -7,6 +7,8 @@ namespace VideoCapture.DemoAnalyzer
 {
     public class DemoAnalyzer : IImageAnalyzer
     {
+        public double CostsPerRequest => 0.0;
+
         public Task<ImageInformation> AnalyzeImageAsync(byte[] image, string mimeType)
         {
             return Task.FromResult(new ImageInformation()
