@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VideoCapture.Grabber
 {
-    public delegate Task FrameGrabbedHandler(MemoryStream stream, string mimeType, int width, int height);
+    public delegate Task FrameGrabbedHandler(MemoryStream displayStream, MemoryStream analysisStream, string mimeType, int width, int height);
     
     public interface IVideoGrabber
     {

@@ -10,6 +10,7 @@
         Title="Video Capture UI for demonstrating Cognitive Services" Height="450" Width="800">
     <Window.Resources>
         <converters:ScaleConverter x:Key="scaleConverter" />
+        <converters:ConfidenceToColorConverter x:Key="confidenceToColorConverter" />
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -56,7 +57,7 @@
                             <TextBlock Text="{Binding RegionTag.DisplayText}" Foreground="White" />
                         </Border>
 
-                        <Rectangle Stroke="Red" StrokeThickness="3">
+                        <Rectangle Stroke="{Binding RegionTag.Confidence, Converter={StaticResource confidenceToColorConverter}}" StrokeThickness="3">
                             <Rectangle.Width>
                                 <MultiBinding Converter="{StaticResource scaleConverter}">
                                     <Binding Path="RegionTag.Width" />

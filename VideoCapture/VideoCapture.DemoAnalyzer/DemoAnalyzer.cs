@@ -15,7 +15,7 @@ namespace VideoCapture.DemoAnalyzer
             {
                 RegionTags = new List<RegionTag>()
                 {
-                    new RegionTag(50, 50, 100, 50, "Demo")
+                    new RegionTag(50, 50, 100, 50, "Demo", 0.9)
                 }
             });
         }

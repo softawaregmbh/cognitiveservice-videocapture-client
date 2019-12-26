@@ -48,9 +48,9 @@ namespace VideoCapture.UI
             await this.videoGrabber.StartAsync();
         }
 
-        private async Task VideoGrabber_OnFrameGrabbedAsync(MemoryStream stream, string mimeType, int width, int height)
+        private async Task VideoGrabber_OnFrameGrabbedAsync(MemoryStream displayStream, MemoryStream analysisStream, string mimeType, int width, int height)
         {
-            var byteArray = stream.ToArray();
+            var byteArray = displayStream.ToArray();
             this.CurrentFrame = byteArray;
             this.FrameWidth = width;
 
@@ -59,10 +59,12 @@ namespace VideoCapture.UI
                 lastAnalysis = DateTime.Now;
                 this.currentlyAnalysing = true;
 
+                var analysisArray = analysisStream.ToArray();
+
                 foreach (var imageAnalyzer in imageAnalyzers)
                 {
                     DateTime startTime = DateTime.Now;
-                    var info = await imageAnalyzer.AnalyzeImageAsync(byteArray, mimeType);
+                    var info = await imageAnalyzer.AnalyzeImageAsync(analysisArray, mimeType);
 
                     this.Statistics[imageAnalyzer].LastDuration = DateTime.Now.Subtract(startTime);
                     this.Statistics[imageAnalyzer].Count++;
@@ -78,7 +80,6 @@ namespace VideoCapture.UI
 
                     if (info != null)
                     {
-                        Console.WriteLine($"{DateTime.Now}: Objects detected");
                         foreach (var regionTag in info.RegionTags)
                         {
                             this.RegionTags.Add(new RegionTagViewModel()

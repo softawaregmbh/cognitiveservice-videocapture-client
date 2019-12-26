@@ -23,9 +23,16 @@ namespace VideoCapture.Grabber
                         break;
                     }
 
-                    using (var stream = image.ToMemoryStream(".jpg", new ImageEncodingParam(ImwriteFlags.JpegQuality, 100)))
+                    int analysisWidth = 320;
+                    int analysisHeight = analysisWidth * image.Height / image.Width;
+                    var analysisImage = image.Clone().Resize(new Size(analysisWidth, analysisHeight));
+
+                    using (var analysisStream = analysisImage.ToMemoryStream(".jpg", new ImageEncodingParam(ImwriteFlags.JpegQuality, 50)))
+                    using (var displayStream = image.ToMemoryStream(".jpg", new ImageEncodingParam(ImwriteFlags.JpegQuality, 100)))
                     {
-                        OnFrameGrabbed?.Invoke(stream, "image/jpeg", image.Width, image.Height);
+                        OnFrameGrabbed?.Invoke(
+                            displayStream,
+                            analysisStream, "image/jpeg", analysisImage.Width, analysisImage.Height);
                     }
 
                     await Task.Delay(delay);

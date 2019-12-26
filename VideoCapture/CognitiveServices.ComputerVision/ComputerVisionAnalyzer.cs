@@ -31,7 +31,7 @@ namespace CognitiveServices.ComputerVision
 
                 if (result.Objects.Any())
                 {
-                    var tags = result.Objects.Select(o => new RegionTag(o.Rectangle.X, o.Rectangle.Y, o.Rectangle.W, o.Rectangle.H, o.ObjectProperty)).ToList();
+                    var tags = result.Objects.Select(o => new RegionTag(o.Rectangle.X, o.Rectangle.Y, o.Rectangle.W, o.Rectangle.H, o.ObjectProperty, o.Confidence)).ToList();
                     return new ImageInformation()
                     {
                         RegionTags = tags
