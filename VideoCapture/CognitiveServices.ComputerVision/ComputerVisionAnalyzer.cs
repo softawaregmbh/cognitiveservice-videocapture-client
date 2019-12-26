@@ -24,7 +24,7 @@ namespace CognitiveServices.ComputerVision
 
         public double CostsPerRequest => 0.84/1000;
 
-        public async Task<ImageInformation> AnalyzeImageAsync(byte[] image, string mimeType)
+        public async Task<ImageInformation> AnalyzeImageAsync(byte[] image, string mimeType, int width, int height)
         {
             using (var memoryStream = new MemoryStream(image))
             {

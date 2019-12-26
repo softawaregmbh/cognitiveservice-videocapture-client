@@ -1,4 +1,5 @@
 ﻿using CognitiveServices.ComputerVision;
+using CognitiveServices.CustomVision;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -48,8 +49,10 @@ namespace VideoCapture.UI
             services.AddSingleton<IVideoGrabber, VideoGrabber>();
 
             services.Configure<ComputerVisionSettings>(Configuration.GetSection(nameof(ComputerVisionSettings)));
+            services.Configure<CustomVisionSettings>(Configuration.GetSection(nameof(CustomVisionSettings)));
 
             services.AddTransient<IImageAnalyzer, ComputerVisionAnalyzer>();
+            services.AddTransient<IImageAnalyzer, CustomVisionAnalyzer>();
 
             services.AddScoped<MainViewModel>(
                 sp => new MainViewModel(

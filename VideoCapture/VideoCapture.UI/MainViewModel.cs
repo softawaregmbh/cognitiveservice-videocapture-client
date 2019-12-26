@@ -64,7 +64,7 @@ namespace VideoCapture.UI
                 foreach (var imageAnalyzer in imageAnalyzers)
                 {
                     DateTime startTime = DateTime.Now;
-                    var info = await imageAnalyzer.AnalyzeImageAsync(analysisArray, mimeType);
+                    var info = await imageAnalyzer.AnalyzeImageAsync(analysisArray, mimeType, width, height);
 
                     this.Statistics[imageAnalyzer].LastDuration = DateTime.Now.Subtract(startTime);
                     this.Statistics[imageAnalyzer].Count++;
