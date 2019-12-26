@@ -49,7 +49,6 @@ namespace VideoCapture.UI
 
             services.Configure<ComputerVisionSettings>(Configuration.GetSection(nameof(ComputerVisionSettings)));
 
-            services.AddTransient<IImageAnalyzer, DemoAnalyzer.DemoAnalyzer>();
             services.AddTransient<IImageAnalyzer, ComputerVisionAnalyzer>();
 
             services.AddScoped<MainViewModel>(

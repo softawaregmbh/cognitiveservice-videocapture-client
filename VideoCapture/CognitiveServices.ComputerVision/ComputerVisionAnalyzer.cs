@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -27,11 +28,38 @@ namespace CognitiveServices.ComputerVision
         {
             using (var memoryStream = new MemoryStream(image))
             {
-                var result = await this.computerVisionApi.DetectObjectsInStreamAsync(memoryStream);
+                var result = await this.computerVisionApi.AnalyzeImageInStreamAsync(
+                    memoryStream,
+                    new []
+                    {
+                        VisualFeatureTypes.Faces,
+                        VisualFeatureTypes.Objects
+                    });
+                
+                var tags = new List<RegionTag>();
 
-                if (result.Objects.Any())
+                if (result.Faces?.Any() ?? false)
                 {
-                    var tags = result.Objects.Select(o => new RegionTag(o.Rectangle.X, o.Rectangle.Y, o.Rectangle.W, o.Rectangle.H, o.ObjectProperty, o.Confidence)).ToList();
+                    var faces = result.Faces.Select(f =>
+                                    new RegionTag(
+                                        f.FaceRectangle.Left,
+                                        f.FaceRectangle.Top,
+                                        f.FaceRectangle.Width,
+                                        f.FaceRectangle.Height,
+                                        $"{f.Gender}, Age: {f.Age}",
+                                        1.0)).ToList();
+
+                    tags.AddRange(faces);
+                }
+
+                if (result.Objects?.Any() ?? false)
+                {
+                    var objects = result.Objects.Select(o => new RegionTag(o.Rectangle.X, o.Rectangle.Y, o.Rectangle.W, o.Rectangle.H, o.ObjectProperty, o.Confidence)).ToList();
+                    tags.AddRange(objects);
+                }
+
+                if (tags.Any())
+                {
                     return new ImageInformation()
                     {
                         RegionTags = tags

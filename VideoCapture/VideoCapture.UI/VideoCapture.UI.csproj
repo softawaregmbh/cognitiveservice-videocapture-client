@@ -18,7 +18,6 @@
   <ItemGroup>
     <ProjectReference Include="..\CognitiveServices.ComputerVision\CognitiveServices.ComputerVision.csproj" />
     <ProjectReference Include="..\VideoCapture.Common\VideoCapture.Common.csproj" />
-    <ProjectReference Include="..\VideoCapture.DemoAnalyzer\VideoCapture.DemoAnalyzer.csproj" />
     <ProjectReference Include="..\VideoCapture.Grabber\VideoCapture.Grabber.csproj" />
   </ItemGroup>
 
