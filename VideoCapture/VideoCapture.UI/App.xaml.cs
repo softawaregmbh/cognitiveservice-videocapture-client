@@ -60,12 +60,13 @@ namespace VideoCapture.UI
 
         private void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<VideoGrabberSettings>(this.Configuration.GetSection(nameof(VideoGrabberSettings)));
             services.AddSingleton<IVideoGrabber, VideoGrabber>();
 
             services.Configure<ComputerVisionSettings>(this.Configuration.GetSection(nameof(ComputerVisionSettings)));
             services.Configure<CustomVisionSettings>(this.Configuration.GetSection(nameof(CustomVisionSettings)));
 
-            services.AddTransient<IImageAnalyzer, ComputerVisionAnalyzer>();
+            // services.AddTransient<IImageAnalyzer, ComputerVisionAnalyzer>();
             services.AddTransient<IImageAnalyzer, CustomVisionAnalyzer>();
 
             services.AddScoped<MainViewModel>(

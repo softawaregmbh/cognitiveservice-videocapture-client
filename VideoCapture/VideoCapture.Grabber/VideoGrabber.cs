@@ -4,7 +4,9 @@
 
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using OpenCvSharp;
 
 namespace VideoCapture.Grabber
@@ -15,13 +17,33 @@ namespace VideoCapture.Grabber
     /// <seealso cref="VideoCapture.Grabber.IVideoGrabber" />
     public class VideoGrabber : IVideoGrabber
     {
+        private readonly VideoGrabberSettings settings;
+
+        public VideoGrabber(IOptions<VideoGrabberSettings> settings)
+        {
+            this.settings = settings?.Value ?? throw new ArgumentNullException(nameof(settings));
+        }
+
         /// <inheritdoc/>
         public event FrameGrabbedHandler OnFrameGrabbed;
 
         /// <inheritdoc/>
         public async Task StartAsync(int delay = 30)
         {
-            OpenCvSharp.VideoCapture capture = new OpenCvSharp.VideoCapture(0);
+            OpenCvSharp.VideoCapture capture;
+
+            switch (this.settings.VideoType)
+            {
+                case VideoType.Webcam:
+                    capture = new OpenCvSharp.VideoCapture(this.settings.WebcamIndex);
+                    break;
+                case VideoType.Url:
+                    capture = new OpenCvSharp.VideoCapture(this.settings.Url);
+                    break;
+                default:
+                    throw new ArgumentException("Invalid settings: video type for grabber not specified or wrong.");
+            }
+            
             using (Mat image = new Mat())
             {
                 while (true)
