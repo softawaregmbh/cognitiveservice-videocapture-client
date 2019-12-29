@@ -1,5 +1,9 @@
 # Video Capture application to demonstrate Azure Cognitive Services
 
+<p>
+    <img src="https://github.com/softawaregmbh/cognitiveservice-videocapture-client/workflows/.NET%20Core/badge.svg" alt="GitHub Actions status"/>    
+</p>
+
 I regularly demonstrate how to use the [Microsoft Azure Cognitive Services](https://azure.microsoft.com/en-us/services/cognitive-services/) and tried to find a way how to send a webcam live stream directly to the Cognitive Services.
 
 The [Cognitive-Samples-VideoFrameAnalysis](https://github.com/microsoft/Cognitive-Samples-VideoFrameAnalysis) project didn't fulfill all my requirements, especially I was looking for a .NET Core 3 WPF application with dependency injection and MVVM.
